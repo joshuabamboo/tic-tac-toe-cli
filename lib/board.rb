@@ -1,4 +1,5 @@
 class Board
+  attr_accessor :remaining_spaces, :winning_combinations
   def initialize
     @current_board = "1|2|3\n4|5|6\n7|8|9"
     @remaining_spaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -10,7 +11,7 @@ class Board
   end
 
   def update_board_with(current_move, x_or_o) 
-    @current_board = @current_board.gsub(current_board, x_or_o)
+    @current_board = @current_board.gsub(current_move, x_or_o)
   end
 
   def update_remaining_spaces(move) 

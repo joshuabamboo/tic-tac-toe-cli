@@ -1,5 +1,5 @@
-require 'pry'
-class Game
+
+class Simple
 
   def initialize
     @current_board = "1|2|3\n4|5|6\n7|8|9" #board
@@ -89,8 +89,4 @@ class Game
     player_move
     puts @current_board
   end
-
 end
-
-ttt=Game.new 
-ttt.play

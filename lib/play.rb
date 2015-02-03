@@ -1,62 +1,18 @@
-class Player
-  def initialize
-    @all_moves_by_player = []
-  end
-end
-
-
-class Computer
-  def initialize
-    @all_moves_by_computer = []
-  end
-end
-
-
-class Board
-  attr_accessor :remaining_spaces, :winning_combinations
-  def initialize
-    @current_board = "1|2|3\n4|5|6\n7|8|9"
-    @remaining_spaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    @winning_combinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
-  end
-
-  def print_board
-    puts @current_board
-  end
-
-  def update_board_with(current_move, x_or_o) 
-    @current_board = @current_board.gsub(current_move, x_or_o)
-  end
-
-  def update_remaining_spaces(move) 
-    @remaining_spaces.delete(move)
-    @remaining_spaces
-  end
-end
-
-
-class Play
+class Game
   def initialize
     @board = Board.new
     @player = Player.new
     @computer = Computer.new
     @all_moves_by_player = []
     @all_moves_by_computer = []
+    @player_xo = "x"
+    @computer_xo = "o"
   end
 
   def welcome
     puts "Welcome to Command Line Tic Tac Toe."
-    x_or_o_choice
-  end
-
-  def x_or_o_choice
-    puts "Select which player you'd like to be? (x/o)"
-    choice = gets.chomp.downcase
-  end
-
-  def x_or_o_computer
-    "x" if x_or_o_choice == "o"
-    "o" if x_or_o_choice == "x"
+    @player.choose_x_or_o
+    @player.set_computer_x_or_o
   end
 
   def valid_move? #game
@@ -89,8 +45,26 @@ class Play
     ttt.play
   end
 
-  def opening(starter)
-    starter.move
+  def opening
+    player_move
+    computer_move
+  end
+
+  def end_game
+    player_move
+    check_for_winner(@all_moves_by_player)
+    computer_move
+    check_for_winner(@all_moves_by_computer)
+    player_move
+    check_for_winner(@all_moves_by_player)
+    computer_move
+    check_for_winner(@all_moves_by_computer)
+    player_move
+    check_for_winner(@all_moves_by_player)
+    computer_move
+    check_for_winner(@all_moves_by_computer)
+    player_move
+    check_for_winner(@all_moves_by_player)
   end
 
   def player_move 
@@ -98,10 +72,10 @@ class Play
     @move = gets.chomp
     if valid_move?
       save_move(@all_moves_by_player, @move)
-      @board.update_board_with(@move, "X")
+      @board.update_board_with(@move, @player_xo)
       @board.update_remaining_spaces(@move)
     else
-      puts "'#{@move}' is not a valid move. Please enter one of the following boxes: #{@remaining_spaces}"
+      puts "'#{@move}' is not a valid move. Please enter one of the following boxes: #{@board.remaining_spaces}"
       player_move
     end
     check_for_winner(@all_moves_by_player)
@@ -112,23 +86,17 @@ class Play
     @move = @board.remaining_spaces.sample
     puts "The computer selected #{@move}" #announcement
     save_move(@all_moves_by_computer, @move)
-    @board.update_board_with(@move, "O")
+    @board.update_board_with(@move, @computer_xo)
     @board.update_remaining_spaces(@move)
     #check_for_winner(@all_moves_by_player)
   end
 
   def play
-    player_move
-    computer_move
-    play_again
-
     #welcome_message
-    
+    welcome
     #opening(starter)
-
+    opening
     #end_game
+    end_game
   end
 end
-
-ttt=Play.new
-ttt.play
