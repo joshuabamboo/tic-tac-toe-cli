@@ -1,7 +1,17 @@
 class Player
+  attr_accessor :player_xo, :computer_xo, :username
+  
   def initialize
     @all_moves_by_player = []
     @all_moves_by_computer = []
+    @player_xo = "X"
+    @computer_xo = "O"
+    @username = "The computer"
+  end
+
+  def get_username
+    puts "Select a username"
+    @username = gets.chomp
   end
 
   def choose_x_or_o
@@ -25,7 +35,7 @@ class Player
   end
 
   def set_computer_x_or_o
-    @computer_xo = "x" if @player_xo == "o"
-    @computer_xo = "o" if @player_xo == "x"
+    @computer_xo = "X" if @player_xo == "O"
+    @computer_xo = "O" if @player_xo == "X"
   end
 end
